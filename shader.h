@@ -49,3 +49,28 @@ unsigned int openShader(std::string path, ShaderType type)
     }
     return shader;
 }
+
+unsigned int createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath)
+{
+    unsigned int vertexShader = openShader(vertexShaderPath, VERTEX_SHADER);
+    unsigned int fragmentShader = openShader(fragmentShaderPath, FRAGMENT_SHADER);
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    int success;
+    char infoLog[512];
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n";
+        return -1;
+    }
+    glUseProgram(shaderProgram);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    return shaderProgram;
+}
