@@ -11,7 +11,7 @@ CXXFLAGS = -Wall -ggdb -O3 $(INCLUDES)
 LDFLAGS = -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 TARGET = main
-cpp_files = main.cpp
+cpp_files = main.cpp $(wildcard imgui/*.cpp)
 objects = $(cpp_files:.cpp=.o) glad.o
 headers =
 
