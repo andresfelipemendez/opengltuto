@@ -1,26 +1,27 @@
 CC = gcc
 CXX = g++
 
-INCLUDES = -I$(glad_inc)
+glad_inc = glad/include
+ASSIMP_INC = assimp/include
+
+INCLUDES = -I$(glad_inc) -I$(ASSIMP_INC) -I$(ASSIMP_INC)/Compiler
 LIBRARIES = 
 
-glad_inc = glad/include
-
 CFLAGS = -Wall -ggdb -O3 $(INCLUDES)
-CXXFLAGS = -Wall -ggdb -O3 $(INCLUDES)
+CXXFLAGS = -Wall -ggdb -std=c++17 $(INCLUDES)
 LDFLAGS = -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 TARGET = main
-cpp_files = main.cpp $(wildcard imgui/*.cpp)
-objects = $(cpp_files:.cpp=.o) glad.o
+cpp_files = src/main.cpp $(wildcard imgui/*.cpp)
+objects = $(cpp_files:.cpp=.o) glad/glad.o
 headers =
 
 all: main
 
 $(TARGET): $(objects) 
-	$(CXX) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o build/$@ $^ $(LDFLAGS)
 
-glad.o: glad/src/glad.c
+glad/glad.o: glad/src/glad.c
 	$(CC) $(INCLUDES) -c $< -o $@
 
 .PHONY : clean
